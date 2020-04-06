@@ -1,6 +1,7 @@
 
-DIR := .
+DIR := ./keypair_1
 SUBJ := $(shell cat subj.txt)
+HOST := xxx.io
 
 keypair:
 	mkdir -p $(DIR)
@@ -10,5 +11,8 @@ keypair:
 run-server:
 	go run src/server/main.go --addr :10443 -crt $(DIR)/server.crt -key $(DIR)/server.key
 
-run-client:
-	curl -i --cacert $(DIR)/server.crt https://xxx.io:10443 --resolve xxx.io:10443:127.0.0.1
+run-client-curl:
+	curl -i --cacert $(DIR)/server.crt https://$(HOST):10443 --resolve $(HOST):10443:127.0.0.1
+
+run-client-go:
+	go run src/client/main.go -cacert $(DIR)/server.crt -i -resolve $(HOST):10443:127.0.0.1 https://$(HOST):10443
